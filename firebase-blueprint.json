@@ -1,0 +1,239 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with demo credit balance and statistics",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "demoCredits": { "type": "number" },
+        "totalEarned": { "type": "number" },
+        "totalSpent": { "type": "number" },
+        "tasksCompleted": { "type": "number" },
+        "gamesPlayed": { "type": "number" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "disabled": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "displayName", "demoCredits", "role", "createdAt"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Administrator record for access control",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "role": { "type": "string", "enum": ["superadmin", "admin"] },
+        "addedAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "role", "addedAt"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Earning task item created by administrators",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 150 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "category": { "type": "string", "enum": ["simple", "quiz", "educational", "ad", "special"] },
+        "rewardCredits": { "type": "number" },
+        "estimatedMinutes": { "type": "number" },
+        "instructions": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "description", "category", "rewardCredits", "estimatedMinutes", "status"]
+    },
+    "TaskSubmission": {
+      "title": "TaskSubmission",
+      "description": "User submission for a task review",
+      "type": "object",
+      "properties": {
+        "taskId": { "type": "string", "maxLength": 128 },
+        "taskTitle": { "type": "string", "maxLength": 150 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 256 },
+        "userDisplayName": { "type": "string", "maxLength": 100 },
+        "proofText": { "type": "string", "maxLength": 2000 },
+        "proofUrl": { "type": "string", "maxLength": 500 },
+        "rewardCredits": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "submittedAt": { "type": "string" },
+        "reviewedAt": { "type": "string" },
+        "reviewedBy": { "type": "string", "maxLength": 128 },
+        "reviewerNotes": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["taskId", "userId", "userEmail", "proofText", "rewardCredits", "status", "submittedAt"]
+    },
+    "YouTubeTask": {
+      "title": "YouTubeTask",
+      "description": "Educational YouTube task with quiz",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 150 },
+        "videoId": { "type": "string", "maxLength": 50 },
+        "videoUrl": { "type": "string", "maxLength": 300 },
+        "channelName": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "rewardCredits": { "type": "number" },
+        "active": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "videoId", "videoUrl", "channelName", "rewardCredits", "active"]
+    },
+    "YouTubeCompletion": {
+      "title": "YouTubeCompletion",
+      "description": "User completion of educational quiz",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "youtubeTaskId": { "type": "string", "maxLength": 128 },
+        "score": { "type": "number" },
+        "rewardCredits": { "type": "number" },
+        "completedAt": { "type": "string" }
+      },
+      "required": ["userId", "youtubeTaskId", "score", "rewardCredits", "completedAt"]
+    },
+    "GameResult": {
+      "title": "GameResult",
+      "description": "User game session result",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "gameType": { "type": "string", "enum": ["quick-math", "pattern-sprint", "memory-challenge"] },
+        "score": { "type": "number" },
+        "difficulty": { "type": "string", "maxLength": 20 },
+        "rewardCredits": { "type": "number" },
+        "playedAt": { "type": "string" }
+      },
+      "required": ["userId", "gameType", "score", "rewardCredits", "playedAt"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Audit record of demo credits earned or adjusted",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["task_reward", "quiz_reward", "game_reward", "admin_adjustment"] },
+        "amount": { "type": "number" },
+        "description": { "type": "string", "maxLength": 250 },
+        "referenceId": { "type": "string", "maxLength": 128 },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["userId", "type", "amount", "description", "timestamp"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "In-app notifications for users",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 100 },
+        "message": { "type": "string", "maxLength": 500 },
+        "type": { "type": "string", "enum": ["task", "quiz", "game", "system", "wallet"] },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "title", "message", "type", "read", "createdAt"]
+    },
+    "AdminLog": {
+      "title": "AdminLog",
+      "description": "Audit log for administrative actions",
+      "type": "object",
+      "properties": {
+        "adminId": { "type": "string", "maxLength": 128 },
+        "adminEmail": { "type": "string", "maxLength": 256 },
+        "action": { "type": "string", "maxLength": 100 },
+        "details": { "type": "string", "maxLength": 1000 },
+        "targetUserId": { "type": "string", "maxLength": 128 },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["adminId", "adminEmail", "action", "details", "timestamp"]
+    },
+    "SupportTicket": {
+      "title": "SupportTicket",
+      "description": "User support inquiries and problem reports",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 256 },
+        "subject": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "enum": ["general", "tasks", "wallet", "bug", "account"] },
+        "message": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["open", "resolved", "closed"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "userEmail", "subject", "category", "message", "status", "createdAt"]
+    },
+    "AppSetting": {
+      "title": "AppSetting",
+      "description": "System-wide settings and toggles",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string", "maxLength": 100 },
+        "value": { "type": "string", "maxLength": 500 },
+        "updatedAt": { "type": "string" },
+        "updatedBy": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["key", "value"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile and statistics"
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Administrator roles"
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Available and active tasks"
+    },
+    "/taskSubmissions/{submissionId}": {
+      "schema": "TaskSubmission",
+      "description": "User submissions for earning tasks"
+    },
+    "/youtubeTasks/{youtubeTaskId}": {
+      "schema": "YouTubeTask",
+      "description": "Educational YouTube video tasks with quizzes"
+    },
+    "/youtubeCompletions/{completionId}": {
+      "schema": "YouTubeCompletion",
+      "description": "User completed educational video quizzes"
+    },
+    "/gameResults/{resultId}": {
+      "schema": "GameResult",
+      "description": "Game practice scores"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Audit trail of demo credit transactions"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User notifications"
+    },
+    "/adminLogs/{logId}": {
+      "schema": "AdminLog",
+      "description": "Admin actions audit log"
+    },
+    "/supportTickets/{ticketId}": {
+      "schema": "SupportTicket",
+      "description": "User help tickets"
+    },
+    "/appSettings/{settingId}": {
+      "schema": "AppSetting",
+      "description": "Platform settings"
+    }
+  }
+}

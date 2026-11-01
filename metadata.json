@@ -1,0 +1,6 @@
+{
+  "name": "Zentro",
+  "description": "Premium international earning and rewards platform featuring tasks, interactive skill games, educational YouTube quizzes, wallet demo credits, and secure administration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
